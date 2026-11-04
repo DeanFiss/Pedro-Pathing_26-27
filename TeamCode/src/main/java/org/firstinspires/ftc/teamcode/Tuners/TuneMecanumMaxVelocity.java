@@ -30,8 +30,8 @@ public class TuneMecanumMaxVelocity extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.dpad_up)   testVelocity += 50;
-        if (gamepad1.dpad_down) testVelocity -= 50;
+        if (gamepad1.dpad_up)   testVelocity += 5;
+        if (gamepad1.dpad_down) testVelocity -= 5;
         testVelocity = Math.max(0, testVelocity);
 
         if (gamepad1.right_bumper) {

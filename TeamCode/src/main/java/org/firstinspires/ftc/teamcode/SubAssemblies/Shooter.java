@@ -1,15 +1,11 @@
-/*package org.firstinspires.ftc.teamcode.SubAssemblies;
+package org.firstinspires.ftc.teamcode.SubAssemblies;
 
 import androidx.core.math.MathUtils;
-
 import com.pedropathing.math.Vector;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.poseTracker;
 
-@TeleOp
 public class Shooter {
 
     private final Vector robotToGoalVector = new Vector();
@@ -68,4 +64,4 @@ public class Shooter {
 
         return new Vector(flywheelSpeed, hoodAngle);
     }
-}*/
+}
