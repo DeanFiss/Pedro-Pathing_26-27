@@ -22,6 +22,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Shooter;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
@@ -65,16 +66,31 @@ public class UpSide_Solo_Front_Park extends LinearOpMode {
     public Command autoRoutine() {
         return sequential(
                 AutoCommands.Idle,
-                waitMs(1500),
+                waitMs(1000),
+                AutoCommands.Shoot,
+                waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
+                AutoCommands.Intake,
+                follow(follower, path1()),
+                AutoCommands.Idle,
+                follow(follower, path2()),
                 hold(follower),
                 AutoCommands.Shoot,
-                follow(follower, path1()),
-                follow(follower, path2()),
+                waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
+                AutoCommands.FlowerIntake,
                 follow(follower, path3()),
+                waitMs(500),
                 follow(follower, path4()),
+                hold(follower),
+                AutoCommands.Shoot,
+                waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
                 follow(follower, path5()),
+                AutoCommands.Idle,
                 follow(follower, path6()),
-                follow(follower, path7())
+                AutoCommands.Shoot,
+                waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
+                AutoCommands.Idle,
+                follow(follower, path7()),
+                hold(follower)
         );
     }
 

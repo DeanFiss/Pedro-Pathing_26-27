@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.Tuners;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Hardware;
-
+@TeleOp
 public class FlowerRampServosMinMaxPosTuner extends OpMode {
 
     private double LeftservoPosition;
