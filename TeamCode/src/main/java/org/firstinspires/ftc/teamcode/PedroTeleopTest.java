@@ -30,7 +30,7 @@ public class PedroTeleopTest extends OpMode {
 
         // relocalise button
         if (gamepad1.startWasPressed()) {
-            Pose cornerPose = new Pose(10.5, 10.5, Math.toRadians(90));
+            Pose cornerPose = new Pose(7.04234, 6.1811, Math.toRadians(90));//tune //when robot is in bottom left corner facing to the right
             // On the fly Pose creation, we dont recommend this for Autonomous. Only accepts radians for heading
             follower.setPose(cornerPose); // overrides our pose
         }

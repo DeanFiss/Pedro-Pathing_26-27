@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@TeleOp(name = "Tune Max Velocity", group = "Tuning")
+@TeleOp
 public class TuneMecanumMaxVelocity extends OpMode {
 
     DcMotorEx frontLeft, frontRight, backLeft, backRight;
