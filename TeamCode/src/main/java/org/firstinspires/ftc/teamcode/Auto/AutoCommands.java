@@ -14,8 +14,8 @@ import java.util.List;
 
 public class AutoCommands {
 
-    public static final List<Integer> Velocities = new ArrayList<>(Arrays.asList(0, 500, 1000, 2000));
-    public static final ArrayList<Double> Hood_Angles = new ArrayList<>(Arrays.asList(0.5, 0.55, 0.4, 0.2));
+    public static final List<Integer> Velocities = new ArrayList<>(Arrays.asList(0, 500, 1000, 2000)); //Tune
+    public static final ArrayList<Double> Hood_Angles = new ArrayList<>(Arrays.asList(0.5, 0.55, 0.4, 0.2)); //Tune
     public static int currentPresetIndex = 0;
     public static double TargetVelocity;
     public static double TargetHoodAngle;
@@ -92,7 +92,7 @@ public class AutoCommands {
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
             })
             .setEnd(endCondition -> {
-                currentPresetIndex = currentPresetIndex + 1;
+                currentPresetIndex += 1;
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
             })
             .requiring(

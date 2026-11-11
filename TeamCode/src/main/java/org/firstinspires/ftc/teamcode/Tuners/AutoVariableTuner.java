@@ -7,34 +7,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.follower.ManualDrive;
 
+import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 @TeleOp
 public class AutoVariableTuner extends OpMode {
-
-    private double FIRSTSHOTVELOCITY;
-    private double FIRSTSHOTHOODDEG;
-    private double FIRSTSHOTTURRETDEG;
-    private double SECONDSHOTVELOCITY;
-    private double SECONDSHOTHOODDEG;
-    private double SECONDSHOTTURRETDEG;
-    private double THIRDSHOTVELOCITY;
-    private double THIRDSHOTHOODDEG;
-    private double THIRDSHOTTURRETDEG;
-    private double FOURTHSHOTVELOCITY;
-    private double FOURTHSHOTHOODDEG;
-    private double FOURTHSHOTTURRETDEG;
-    private double FIFTHSHOTVELOCITY;
-    private double FIFTHSHOTHOODDEG;
-    private double FIFTHSHOTTURRETDEG;
     private double SHOTINDEX = 1;
     private double HOODINDEX = 1;
-    private double TURRETINDEX = 1;
     private double CURRENTINDEX = 1;
+    private double TARGETVELOCITY;
+    private double HOODDEG;
 
 
     private Follower follower;
+
     @Override
-    public void init(){
+    public void init() {
         follower = Constants.create(hardwareMap);
 
     }
@@ -47,46 +34,41 @@ public class AutoVariableTuner extends OpMode {
                 gamepad1.right_stick_x,
                 follower.pose().heading());
         follower.manual(powers);
-
-
-
-        if (gamepad1.dpadUpWasReleased()) {
-            if (CURRENTINDEX == 1) {
-                SHOTINDEX += 1;
-            } if (CURRENTINDEX == 2) {
-                HOODINDEX += 1;
-            } if (CURRENTINDEX == 3) {
-                TURRETINDEX += 1;
-            }
-
-        } if (gamepad1.dpadDownWasReleased()) {
-            if (CURRENTINDEX == 1) {
-                SHOTINDEX -= 1;
-            } if (CURRENTINDEX == 2) {
-                HOODINDEX -= 1;
-            } if (CURRENTINDEX == 3) {
-                TURRETINDEX -= 1;
-            }
-        } if (gamepad1.dpadLeftWasReleased()) {
-             CURRENTINDEX += 1;
+        if (gamepad1.dpadLeftWasReleased()) {
+            CURRENTINDEX += 1;
         } if (gamepad1.dpadRightWasReleased()) {
-             CURRENTINDEX -= 1;
+            CURRENTINDEX -= 1;
         }
+        if (gamepad1.rightBumperWasReleased()) {
+            if (CURRENTINDEX == 1) {
+                TARGETVELOCITY += 25;
+            } if (CURRENTINDEX == 2) {
+                HOODDEG += 0.02;
+            }
 
-        if (gamepad1.startWasPressed()) {
+        } if (gamepad1.startWasPressed()) {
             Pose cornerPose = new Pose(
                     7.04234,
                     6.1811,
                     Math.toRadians(90)); //tune //when robot is in bottom left corner facing to the right
+
 
             follower.setPose(cornerPose); // overrides our pose
         }
 
         follower.update();
         Pose robotPose = follower.pose(); // returns a Pose object
+        telemetry.addLine("Use Bumbers to increase and decrease selected variable ");
+        telemetry.addLine("Use DPAD LEFT and DPAD RIGHT to switch between variable ");
+        telemetry.addLine("Use Start to zero");
+        telemetry.addLine("");
         telemetry.addData("Robot X", robotPose.x());
         telemetry.addData("Robot Y", robotPose.y());
+        telemetry.addData("Target Velocity", TARGETVELOCITY);
+        telemetry.addData("Current Velocity", Hardware.FlyWheel.getVelocity());
+        telemetry.addData("Hood DEG", HOODDEG);
         telemetry.addData("Robot Heading", Math.toDegrees(robotPose.heading()));
+
     }
 }
 

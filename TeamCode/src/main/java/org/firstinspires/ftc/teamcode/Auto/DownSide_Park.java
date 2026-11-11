@@ -29,6 +29,7 @@ public class DownSide_Park extends LinearOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                AutoCommands.Off,
                 follow(follower, path1())
         );
     }

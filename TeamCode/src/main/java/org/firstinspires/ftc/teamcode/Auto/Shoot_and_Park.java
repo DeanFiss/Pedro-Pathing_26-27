@@ -16,6 +16,8 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Auto.AutoCommands;
+import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
@@ -26,14 +28,22 @@ public class Shoot_and_Park extends LinearOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(56, 8, 270);
-    private final Pose path1 = poseFactory.of(13, 90, 180);
-    private final Pose path1Control1 = poseFactory.of(8.5277, 72.2844, 0);
+    private final Pose point1 = poseFactory.of(56, 10, 270);
+    private final Pose path2Start = poseFactory.of(56, 10, 270);
+    private final Pose path2 = poseFactory.of(13, 90, 180);
+    private final Pose path2Control1 = poseFactory.of(8.5277, 72.2844, 0);
 
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                follow(follower, path1())
-        );
+                AutoCommands.Idle,
+                follow(follower, path1()),
+                AutoCommands.Shoot,
+                waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
+                AutoCommands.Idle,
+                follow(follower, path2()),
+                AutoCommands.Off
+                );
     }
 
     @Override
@@ -64,6 +74,10 @@ public class Shoot_and_Park extends LinearOpMode {
     }
 
     public Path path1() {
-        return Paths.curve(start, path1Control1, path1).linear(start, path1);
+        return Paths.line(start, point1).linear(start, point1);
+    }
+
+    public Path path2() {
+        return Paths.curve(path2Start, path2Control1, path2).linear(path2Start, path2);
     }
 }
