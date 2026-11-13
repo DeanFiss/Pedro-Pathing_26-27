@@ -71,9 +71,9 @@ public class Hardware extends OpMode {
 
         //Servos
         FlowerRampLeft = hardwareMap.get(Servo.class, "Flowerleft");
-        FlowerRampRight = hardwareMap.get(Servo.class, "Flowertight");
-        IntakeBarLeft = hardwareMap.get(Servo.class, "Intakeleft");
-        IntakeBarRight = hardwareMap.get(Servo.class, "Intakeright");
+        FlowerRampRight = hardwareMap.get(Servo.class, "Flowerright");
+        IntakeBarLeft = hardwareMap.get(Servo.class, "Intakesleft");
+        IntakeBarRight = hardwareMap.get(Servo.class, "Intakesright");
         Hood = hardwareMap.get(Servo.class, "Hood");
         Gate = hardwareMap.get(Servo.class, "Gate");
 
