@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import static org.firstinspires.ftc.teamcode.Constants.DriveConstants.MAX_VELOCITY;
 import static org.firstinspires.ftc.teamcode.Hardware.pinpoint;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp
 public class FieldCentricMecanumTeleOp extends OpMode {
-    double MAX_VELOCITY = 2200; //change with new bot
+
     private boolean lastOptionsState = false;
     Hardware Hardware;
 
@@ -45,9 +46,9 @@ public class FieldCentricMecanumTeleOp extends OpMode {
         double bl = (rotY - rotX + rx) / denominator;
         double fr = (rotY - rotX - rx) / denominator;
         double br = (rotY + rotX - rx) / denominator;
-        Hardware.FrontLeft.setVelocity(fl * MAX_VELOCITY);
-        Hardware.BackLeft.setVelocity(bl * MAX_VELOCITY);
-        Hardware.FrontRight.setVelocity(fr * MAX_VELOCITY);
-        Hardware.BackRight.setVelocity(br * MAX_VELOCITY);
+        org.firstinspires.ftc.teamcode.Hardware.FrontLeft.setVelocity(fl * MAX_VELOCITY);
+        org.firstinspires.ftc.teamcode.Hardware.BackLeft.setVelocity(bl * MAX_VELOCITY);
+        org.firstinspires.ftc.teamcode.Hardware.FrontRight.setVelocity(fr * MAX_VELOCITY);
+        org.firstinspires.ftc.teamcode.Hardware.BackRight.setVelocity(br * MAX_VELOCITY);
     }
 }
