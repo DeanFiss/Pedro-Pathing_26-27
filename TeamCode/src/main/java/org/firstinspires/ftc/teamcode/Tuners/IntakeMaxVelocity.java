@@ -19,7 +19,8 @@ public class IntakeMaxVelocity extends OpMode {
     public void loop() {
         if (gamepad1.dpad_up)   testVelocity += 5;
         if (gamepad1.dpad_down) testVelocity -= 5;
-        testVelocity = Math.max(0, testVelocity);
+
+
 
         if (gamepad1.right_bumper) {
             Hardware.IntakeLeft.setVelocity(testVelocity);

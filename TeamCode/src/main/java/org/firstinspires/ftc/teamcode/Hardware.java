@@ -52,7 +52,11 @@ public class Hardware {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        BackRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        FrontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        FrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        IntakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        IntakeRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Turret.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         FlyWheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);

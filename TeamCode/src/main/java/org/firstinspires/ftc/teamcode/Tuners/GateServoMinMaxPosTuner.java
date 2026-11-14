@@ -10,12 +10,15 @@ public class GateServoMinMaxPosTuner extends OpMode {
     private double servoPosition;
     private double servoPositionOpen = 0;
     private double servoPositionClosed = 0;
-
+    Hardware Hardware;
 
     @Override
     public void init() {
+        Hardware = new Hardware(hardwareMap);
 
     }
+
+
 
     @Override
     public void loop() {
