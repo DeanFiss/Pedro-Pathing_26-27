@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class poseTracker {
 
-    public static GoBildaPinpointDriver pinpoint;
+    private static GoBildaPinpointDriver pinpoint;
 
     public poseTracker(HardwareMap hardwareMap) {
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");//tune mm

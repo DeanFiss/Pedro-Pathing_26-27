@@ -1,15 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 
 
-public class Hardware extends OpMode {
+public class Hardware {
     public static DcMotorEx FrontLeft;
     public static DcMotorEx FrontRight;
     public static DcMotorEx BackRight;
@@ -25,17 +28,8 @@ public class Hardware extends OpMode {
     public static Servo Gate;
     public static Servo Hood;
 
-    public static poseTracker poseTracker;
-
-
-    @Override
-    public void init() {
-
-
-    }
-
-    @Override
-    public void loop() {
+    public static GoBildaPinpointDriver pinpoint;
+    public Hardware (HardwareMap hardwareMap) {
 
         //Motors
         FrontLeft = hardwareMap.get(DcMotorEx.class, "Leftfront");
@@ -58,6 +52,7 @@ public class Hardware extends OpMode {
         BackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        BackLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         Turret.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         FlyWheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
@@ -77,11 +72,19 @@ public class Hardware extends OpMode {
         Hood = hardwareMap.get(Servo.class, "Hood");
         Gate = hardwareMap.get(Servo.class, "Gate");
 
-        Gate.scaleRange(ShooterConstants.GATE_SERVO_CLOSED, ShooterConstants.GATE_SERVO_OPEN);
-        Hood.scaleRange(ShooterConstants.HOOD_SERVO_MIN_POS, ShooterConstants.HOOD_SERVO_MAX_POS);
+        //Gate.scaleRange(ShooterConstants.GATE_SERVO_CLOSED, ShooterConstants.GATE_SERVO_OPEN);
+        // Hood.scaleRange(ShooterConstants.HOOD_SERVO_MIN_POS, ShooterConstants.HOOD_SERVO_MAX_POS);
 
         //Pinpont
-        poseTracker = new poseTracker(hardwareMap);
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");//tune mm
+        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        pinpoint.setEncoderDirections(
+                GoBildaPinpointDriver.EncoderDirection.FORWARD,                          //tune
+                GoBildaPinpointDriver.EncoderDirection.FORWARD                           //tune
+        );
+        pinpoint.resetPosAndIMU();
+
+
 
 
 

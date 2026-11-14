@@ -1,20 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
+
+import static org.firstinspires.ftc.teamcode.Hardware.pinpoint;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Constants.DriveConstants;
 
 @TeleOp
 public class FieldCentricMecanumTeleOp extends OpMode {
     double MAX_VELOCITY = 2200; //change with new bot
     private boolean lastOptionsState = false;
+    Hardware Hardware;
 
     @Override
     public void init() {
+        Hardware = new Hardware(hardwareMap);
     }
 
     @Override
@@ -23,16 +25,16 @@ public class FieldCentricMecanumTeleOp extends OpMode {
         double x = gamepad1.left_stick_x;
         double rx = gamepad1.right_stick_x;
 
-        Hardware.poseTracker.pinpoint.update();
+        pinpoint.update();
 
         // Safe rising-edge check: triggers ONLY once when options is pressed down
         boolean currentOptionsState = gamepad1.options;
         if (currentOptionsState && !lastOptionsState) {
-            Hardware.poseTracker.pinpoint.resetPosAndIMU();
+            pinpoint.resetPosAndIMU();
         }
         lastOptionsState = currentOptionsState;
 
-        double botHeading = Math.toRadians(Hardware.poseTracker.pinpoint.getHeading(AngleUnit.DEGREES));
+        double botHeading = Math.toRadians(pinpoint.getHeading(AngleUnit.DEGREES));
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);

@@ -4,6 +4,7 @@ import androidx.core.math.MathUtils;
 import com.pedropathing.math.Vector;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
+import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.poseTracker;
 
 public class Shooter {
@@ -24,8 +25,8 @@ public class Shooter {
 
         //get robot velocity and convert it into parallel and perpendicular components
         Vector robotVelocity = new Vector(
-                poseTracker.pinpoint.getVelX(DistanceUnit.INCH),
-                poseTracker.pinpoint.getVelY(DistanceUnit.INCH)
+                Hardware.pinpoint.getVelX(DistanceUnit.INCH),
+                Hardware.pinpoint.getVelY(DistanceUnit.INCH)
         );
 
         double coordinateTheta = robotVelocity.toVector2D().theta() - robotToGoalVector.toVector2D().theta();

@@ -6,26 +6,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.Hardware;
+
 @TeleOp
 public class TuneMecanumMaxVelocity extends OpMode {
 
-    DcMotorEx frontLeft, frontRight, backLeft, backRight;
     double testVelocity = 1000;
+    Hardware Hardware;
 
     @Override
     public void init() {
-        frontLeft  = hardwareMap.get(DcMotorEx.class, "leftFront");
-        frontRight = hardwareMap.get(DcMotorEx.class, "rightFront");
-        backLeft   = hardwareMap.get(DcMotorEx.class, "leftRear");
-        backRight  = hardwareMap.get(DcMotorEx.class, "rightRear");
-
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        Hardware = new Hardware(hardwareMap);
     }
 
     @Override
@@ -35,15 +26,15 @@ public class TuneMecanumMaxVelocity extends OpMode {
         testVelocity = Math.max(0, testVelocity);
 
         if (gamepad1.right_bumper) {
-            frontLeft.setVelocity(testVelocity);
-            frontRight.setVelocity(testVelocity);
-            backLeft.setVelocity(testVelocity);
-            backRight.setVelocity(testVelocity);
+            Hardware.FrontLeft.setVelocity(testVelocity);
+            Hardware.FrontRight.setVelocity(testVelocity);
+            Hardware.BackLeft.setVelocity(testVelocity);
+            Hardware.BackRight.setVelocity(testVelocity);
         } else {
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            backLeft.setPower(0);
-            backRight.setPower(0);
+            Hardware.FrontLeft.setPower(0);
+            Hardware.FrontRight.setPower(0);
+            Hardware.BackLeft.setPower(0);
+            Hardware.BackRight.setPower(0);
         }
 
         telemetry.addLine("Hold RIGHT BUMPER to drive forward at test velocity");
@@ -52,11 +43,14 @@ public class TuneMecanumMaxVelocity extends OpMode {
         telemetry.addLine("Set MAX_VELOCITY to just below that point");
         telemetry.addLine("");
         telemetry.addData("Test Velocity",      "%.0f", testVelocity);
-        telemetry.addData("FL Actual Velocity", "%.0f", frontLeft.getVelocity());
-        telemetry.addData("FR Actual Velocity", "%.0f", frontRight.getVelocity());
-        telemetry.addData("BL Actual Velocity", "%.0f", backLeft.getVelocity());
-        telemetry.addData("BR Actual Velocity", "%.0f", backRight.getVelocity());
+        telemetry.addData("FL Actual Velocity", "%.0f", Hardware.FrontLeft.getVelocity());
+        telemetry.addData("FR Actual Velocity", "%.0f", Hardware.FrontRight.getVelocity());
+        telemetry.addData("BL Actual Velocity", "%.0f", Hardware.BackLeft.getVelocity());
+        telemetry.addData("BR Actual Velocity", "%.0f", Hardware.BackRight.getVelocity());
         telemetry.update();
     }
 }
+
+
+
 
