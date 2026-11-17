@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
+import org.firstinspires.ftc.teamcode.Hardware;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
@@ -32,6 +33,7 @@ public class Shoot_and_Park extends LinearOpMode {
     private final Pose path2Start = poseFactory.of(56, 10, 270);
     private final Pose path2 = poseFactory.of(13, 90, 180);
     private final Pose path2Control1 = poseFactory.of(8.5277, 72.2844, 0);
+    Hardware Hardware;
 
     // Autonomous routine
     public Command autoRoutine() {
@@ -46,8 +48,14 @@ public class Shoot_and_Park extends LinearOpMode {
                 );
     }
 
+
     @Override
     public void runOpMode() {
+        Hardware = new Hardware(hardwareMap);
+
+
+
+
         Scheduler.reset();
         follower = Constants.create(hardwareMap);
         follower.setPose(start);
@@ -63,6 +71,8 @@ public class Shoot_and_Park extends LinearOpMode {
             telemetry.addData("x", follower.pose().x());
             telemetry.addData("y", follower.pose().y());
             telemetry.addData("heading", follower.pose().heading());
+            telemetry.addData("Shooting Active?", AutoCommands.Shoot.isScheduled());
+            telemetry.addData("System Idle?", AutoCommands.Idle.isScheduled());
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());

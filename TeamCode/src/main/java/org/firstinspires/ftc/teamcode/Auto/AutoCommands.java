@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+
 import com.pedropathing.ivy.Command;
 
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
@@ -14,27 +16,25 @@ import java.util.List;
 
 public class AutoCommands {
 
-    public static final List<Integer> Velocities = new ArrayList<>(Arrays.asList(0, 500, 1000, 2000)); //Tune
-    public static final ArrayList<Double> Hood_Angles = new ArrayList<>(Arrays.asList(0.5, 0.55, 0.4, 0.2)); //Tune
+    public static final double velocity =  1900;//Tune
+    //public static final ArrayList<Double> Hood_Angles = new ArrayList<>(Arrays.asList(0.5, 0.55, 0.4, 0.2)); //Tune
     public static int currentPresetIndex = 0;
     public static double TargetVelocity;
     public static double TargetHoodAngle;
+
     public static Command Idle = Command.build()
             .setExecute(() -> {
                 Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
                 Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
                 Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
                 Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
-                TargetVelocity = Velocities.get(currentPresetIndex);
+                TargetVelocity = velocity;
                 Hardware.FlyWheel.setVelocity(TargetVelocity);
-                TargetHoodAngle = Hood_Angles.get(currentPresetIndex);
                 Hardware.Hood.setPosition(TargetHoodAngle);
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
             })
-            .setEnd(endCondition -> {
-                // executed on end
-            })
+            .setDone(() -> Hardware.FlyWheel.getVelocity() >= 1700)
             .requiring(
                     Hardware.FlyWheel,
                     Hardware.FlowerRampLeft,
@@ -87,6 +87,7 @@ public class AutoCommands {
 
     public static Command Shoot = Command.build()
             .setExecute(() -> {
+                Hardware.FlyWheel.setVelocity(TargetVelocity);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
@@ -95,11 +96,11 @@ public class AutoCommands {
                 currentPresetIndex += 1;
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
             })
+            .setDone(() -> Hardware.FlyWheel.getVelocity() <= 1700)
             .requiring(
                     Hardware.IntakeRight,
                     Hardware.IntakeLeft,
-                    Hardware.Gate,
-                    currentPresetIndex
+                    Hardware.Gate
                     );
     public static Command Off = Command.build()
             .setExecute(() -> {

@@ -15,11 +15,15 @@ public class Scrim_TeleOp extends OpMode {
 
 
     private boolean lastOptionsState = false;
+    private int Inatkeon = 0;
     Hardware Hardware;
+    private double Target = 1700;
 
     @Override
     public void init() {
         Hardware = new Hardware(hardwareMap);
+        org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
+        org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
 
     }
 
@@ -27,33 +31,40 @@ public class Scrim_TeleOp extends OpMode {
     @Override
     public void loop() {
 
-        if (gamepad1.right_bumper) {
+        if (Inatkeon == 1) {
             org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
             org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+        } else if (Inatkeon == 2) {
+            org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(-IntakeConstants.INTAKE_VELOCITY);
+            org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(-  IntakeConstants.INTAKE_VELOCITY);
+        } else if (Inatkeon == 0) {
+            org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setPower(0);
+            org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setPower(0);
+        }if (gamepad2.right_bumper) {
+            Inatkeon = 1;
 
+        } else if (gamepad2.left_bumper) {
+            Inatkeon = 2;
+        } else if (gamepad1.left_bumper) {
+            Inatkeon = 1;
         } else {
-            org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
-            org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
-
-        } if (gamepad1.left_bumper) {
-            org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(-IntakeConstants.INTAKE_VELOCITY);
-            org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(-IntakeConstants.INTAKE_VELOCITY);
+            Inatkeon = 0;
         }
 
-        if (gamepad2.y) {
-            org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
-            org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
-
-        } if (gamepad2.a) {
-            org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
-            org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
-        } if (gamepad1.b) {
+        if (gamepad1.left_bumper) {
             org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
         } else {
             org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
 
         }
-        org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(1600);
+        if (gamepad2.dpad_up) {
+            Target += 5;
+        }
+        if (gamepad2.dpad_down) {
+            Target -= 5;
+        }
+
+        org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
 
 
         double y = -gamepad1.left_stick_y;
@@ -94,6 +105,11 @@ public class Scrim_TeleOp extends OpMode {
         telemetry.addData("Back Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.BackLeft.getVelocity());
         telemetry.addData("Front Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontRight.getVelocity());
         telemetry.addData("Front Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontLeft.getVelocity());
+        telemetry.addData("FlyWheel Target", "%.4f", Target);
+
 
     }
+
+
+
 }
