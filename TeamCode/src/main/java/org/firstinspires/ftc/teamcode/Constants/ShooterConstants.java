@@ -8,8 +8,8 @@ public class ShooterConstants {
     public static double SCORE_HEIGHT               = 29; //inches //Change
     public static double SCORE_ANGLE                = Math.toRadians(-30); //radians //Change
     public static double PASS_THROUGH_POINT_RADIUS  = 5; //inches //Change
-    public static double HOOD_MAX_ANGLE             = Math.toRadians(70); //Tune
-    public static double HOOD_MIN_ANGLE             = Math.toRadians(30); //Tune
+    public static double HOOD_MAX_ANGLE             = Math.toRadians(70); //Tune //Math.toRadians(Degrees);
+    public static double HOOD_MIN_ANGLE             = Math.toRadians(30); //Tune //Math.toRadians(Degrees);
     public static double HOOD_SERVO_MIN_POS         = 1.0; //Tune
     public static double HOOD_SERVO_MAX_POS         = 0.325; //Tune
     public static double GATE_SERVO_CLOSED          = 0;
