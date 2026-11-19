@@ -12,5 +12,6 @@ public class IntakeConstants {
     public static double RIGHT_FLOWER_RAMP_SERVO_DOWN_POS               = 1;
     public static double INTAKE_VELOCITY                                = 2000;  //Tune
     public static double INTAKE_IDLE_VELOCITY                           = 0;  //Tune
-    public static double AUTO_FLOWER_INTAKE_TIME = 1000; //Tune
+    public static double AUTO_FLOWER_INTAKE_TIME                        = 1000; //Tune
+    public static double AUTO_INTAKE_TIME                               = 1000; //Tune
 }

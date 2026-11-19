@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
@@ -62,6 +63,9 @@ public class Hardware {
         FlyWheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         IntakeLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         IntakeRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(100, 0, 0, 22);
+        FlyWheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
         Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         FlyWheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

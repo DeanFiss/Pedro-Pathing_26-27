@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 
-import static com.pedropathing.ivy.commands.Commands.waitMs;
 
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.behaviors.InterruptedBehavior;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.Hardware;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 
 public class AutoCommands {
 
@@ -21,6 +17,7 @@ public class AutoCommands {
     public static int currentPresetIndex = 0;
     public static double TargetVelocity;
     public static double TargetHoodAngle;
+    public static ElapsedTime timer = new ElapsedTime();
 
     public static Command Idle = Command.build()
             .setExecute(() -> {
@@ -34,7 +31,8 @@ public class AutoCommands {
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
             })
-            .setDone(() -> Hardware.FlyWheel.getVelocity() >= 1700)
+            .setPriority(-1)
+            .setInterruptedBehavior(InterruptedBehavior.SUSPEND)
             .requiring(
                     Hardware.FlyWheel,
                     Hardware.FlowerRampLeft,
@@ -46,16 +44,18 @@ public class AutoCommands {
                     Hardware.Hood);
 
 
+    
     public static Command Intake = Command.build()
+            .setStart(() -> {
+                timer.reset();
+            })
             .setExecute(() -> {
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
                 Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
             })
-            .setEnd(endCondition -> {
-                // executed on end
-            })
+            .setDone(()-> timer.seconds() >= IntakeConstants.AUTO_INTAKE_TIME)
             .requiring(
                     Hardware.IntakeLeft,
                     Hardware.IntakeRight,
@@ -64,6 +64,9 @@ public class AutoCommands {
 
 
     public static Command FlowerIntake = Command.build()
+            .setStart(() -> {
+                timer.reset();
+            })
             .setExecute(() -> {
                 Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_DOWN_POS);
                 Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_DOWN_POS);
@@ -72,9 +75,7 @@ public class AutoCommands {
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
             })
-            .setEnd(endCondition -> {
-                // executed on end
-            })
+            .setDone(()-> timer.seconds() >= IntakeConstants.AUTO_FLOWER_INTAKE_TIME)
             .requiring(
                     Hardware.FlowerRampLeft,
                     Hardware.FlowerRampRight,
@@ -86,21 +87,25 @@ public class AutoCommands {
 
 
     public static Command Shoot = Command.build()
+            .setStart(() -> {
+                timer.reset();
+            })
             .setExecute(() -> {
                 Hardware.FlyWheel.setVelocity(TargetVelocity);
                 Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
             })
+            .setDone(() -> Hardware.FlyWheel.getVelocity() <= 1400 || timer.seconds() >= ShooterConstants.AUTO_SHOOTER_TIME)
             .setEnd(endCondition -> {
                 currentPresetIndex += 1;
                 Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
             })
-            .setDone(() -> Hardware.FlyWheel.getVelocity() <= 1700)
             .requiring(
                     Hardware.IntakeRight,
                     Hardware.IntakeLeft,
-                    Hardware.Gate
+                    Hardware.Gate,
+                    Hardware.FlyWheel
                     );
     public static Command Off = Command.build()
             .setExecute(() -> {

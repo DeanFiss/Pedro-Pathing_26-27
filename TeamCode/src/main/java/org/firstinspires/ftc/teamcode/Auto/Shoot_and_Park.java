@@ -38,7 +38,7 @@ public class Shoot_and_Park extends LinearOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                AutoCommands.Idle,
+                waitUntil(() -> Hardware.FlyWheel.getVelocity() >= 1500),
                 follow(follower, path1()),
                 AutoCommands.Shoot,
                 waitMs(ShooterConstants.AUTO_SHOOTER_TIME),
@@ -73,6 +73,7 @@ public class Shoot_and_Park extends LinearOpMode {
             telemetry.addData("heading", follower.pose().heading());
             telemetry.addData("Shooting Active?", AutoCommands.Shoot.isScheduled());
             telemetry.addData("System Idle?", AutoCommands.Idle.isScheduled());
+            telemetry.addData("Flywheel vel", org.firstinspires.ftc.teamcode.Hardware.FlyWheel.getVelocity());
 
             if (follower.currentPath() != null) {
                 telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());

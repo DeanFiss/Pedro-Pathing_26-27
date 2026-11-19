@@ -63,8 +63,11 @@ public class Scrim_TeleOp extends OpMode {
         if (gamepad2.dpad_down) {
             Target -= 5;
         }
+        if (gamepad1.a) {
+            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
+        }
 
-        org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
+
 
 
         double y = -gamepad1.left_stick_y;
