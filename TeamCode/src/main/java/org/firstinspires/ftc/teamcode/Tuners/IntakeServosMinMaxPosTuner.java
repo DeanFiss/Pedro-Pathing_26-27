@@ -13,10 +13,14 @@ public class IntakeServosMinMaxPosTuner extends OpMode {
     private double LeftservoPositionClosed = 0;
     private double RightservoPositionOpen = 0;
     private double RightservoPositionClosed = 0;
+    Hardware Hardware;
 
 
     @Override
     public void init() {
+        Hardware = new Hardware(hardwareMap);
+        LeftservoPosition = org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.getPosition();
+        RightservoPosition = org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.getPosition();
 
     }
 
