@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.Hardware;
 @TeleOp
 public class IntakeServosMinMaxPosTuner extends OpMode {
 
-    private double LeftservoPosition;
-    private double RightservoPosition;
+    private double LeftservoPosition = org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.getPosition();
+    private double RightservoPosition = org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.getPosition();
     private double LeftservoPositionOpen = 0;
     private double LeftservoPositionClosed = 0;
     private double RightservoPositionOpen = 0;
@@ -47,8 +47,8 @@ public class IntakeServosMinMaxPosTuner extends OpMode {
         }
         LeftservoPosition = Math.max(0.0, Math.min(1.0, LeftservoPosition));
 
-        Hardware.IntakeBarLeft.setPosition(LeftservoPosition);
-        Hardware.IntakeBarRight.setPosition(RightservoPosition);
+        org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(LeftservoPosition);
+        org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(RightservoPosition);
 
         telemetry.addLine("Use DPAD UP and DPAD DOWN to move the Left Intake Servo");
         telemetry.addLine("Use DPAD LEFT and DPAD RIGHT to move the Right Intake Servo");

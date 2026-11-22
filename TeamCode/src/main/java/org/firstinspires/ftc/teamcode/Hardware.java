@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -28,6 +29,7 @@ public class Hardware {
     public static Servo IntakeBarLeft;
     public static Servo Gate;
     public static Servo Hood;
+    public static Limelight3A limelight;
 
     public static GoBildaPinpointDriver pinpoint;
     public Hardware (HardwareMap hardwareMap) {
@@ -91,6 +93,10 @@ public class Hardware {
                 GoBildaPinpointDriver.EncoderDirection.FORWARD                           //tune
         );
         pinpoint.resetPosAndIMU();
+
+        //LimeLight
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.pipelineSwitch(0);
 
 
 

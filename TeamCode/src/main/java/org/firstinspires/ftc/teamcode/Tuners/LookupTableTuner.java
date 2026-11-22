@@ -1,7 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tuners;
 
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.GOAL_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_LENS_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_MOUNT_ANGLE_DEGREES;
+import static org.firstinspires.ftc.teamcode.Hardware.limelight;
+
 import androidx.core.math.MathUtils;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,6 +25,7 @@ public class LookupTableTuner extends OpMode {
     boolean prevDpadDown = false;
     boolean prevDpadLeft = false;
     boolean prevDpadRight = false;
+    double distanceFromLimelightToGoalInches;
 
     @Override
     public void init() {
@@ -61,6 +68,19 @@ public class LookupTableTuner extends OpMode {
         }
         org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(HoodAngle);
 
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            double targetOffsetAngle_Vertical = result.getTy();
+
+            double angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
+
+            double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+
+            distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
+
+        }
+
         telemetry.addLine("Hold RIGHT BUMPER to drive forward at test velocity");
         telemetry.addLine("DPAD UP/DOWN to increase/decrease velocity");
         telemetry.addLine("DPAD LEFT/RIGHT to increase/decrease hood angle");
@@ -72,6 +92,7 @@ public class LookupTableTuner extends OpMode {
         telemetry.addData("Target Hood Angle",      "%.0f", HoodAngle);
         telemetry.addData("Actual Position", "%.0f",
                 org.firstinspires.ftc.teamcode.Hardware.Hood.getPosition());
+        telemetry.addData("Distance from AprilTag", "%. 0f", distanceFromLimelightToGoalInches);
 
         telemetry.update();
     }

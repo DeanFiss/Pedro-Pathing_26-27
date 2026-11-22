@@ -1,14 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.Constants.DriveConstants.MAX_VELOCITY;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.GOAL_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_LENS_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_MOUNT_ANGLE_DEGREES;
+import static org.firstinspires.ftc.teamcode.Hardware.limelight;
 import static org.firstinspires.ftc.teamcode.Hardware.pinpoint;
 
+import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
+import org.firstinspires.ftc.teamcode.Constants.TurretConstants;
+
 @TeleOp
 public class Scrim_TeleOp extends OpMode {
 
@@ -18,6 +25,10 @@ public class Scrim_TeleOp extends OpMode {
     private int Inatkeon = 0;
     Hardware Hardware;
     private double Target = 1700;
+    private double targetOffsetAngle_Vertical;
+    private double angleToGoalDegrees;
+    private double angleToGoalRadians;
+    private double distanceFromLimelightToGoalInches;
 
     @Override
     public void init() {
@@ -27,6 +38,10 @@ public class Scrim_TeleOp extends OpMode {
 
     }
 
+    @Override
+    public void start() {
+        limelight.start();
+    }
 
     @Override
     public void loop() {
@@ -56,19 +71,61 @@ public class Scrim_TeleOp extends OpMode {
         } else {
             org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
 
+        } if (gamepad2.dpad_up) {
+            org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
+            org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
+
+        } if (gamepad2.dpad_down) {
+            org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
+            org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
         }
-        if (gamepad2.dpad_up) {
+        if (gamepad2.dpad_left) {
             Target += 5;
         }
-        if (gamepad2.dpad_down) {
+        if (gamepad2.dpad_right) {
             Target -= 5;
         }
+
+
+        double turretPower = 0.0;
+
         if (gamepad1.a) {
-            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                double tx = result.getTx();
+                double headingError = -tx;
+
+                if (Math.abs(headingError) > TurretConstants.DEADBAND) {
+                    if (headingError < 0) {
+                        turretPower = (TurretConstants.Kp * headingError) + TurretConstants.MIN_COMMAND;
+                    } else {
+                        turretPower = (TurretConstants.Kp * headingError) - TurretConstants.MIN_COMMAND;
+                    }
+                }
+            }
+        } else {
+            turretPower = gamepad1.right_stick_x * 0.5;
+        }
+
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            targetOffsetAngle_Vertical = result.getTy();
+
+            angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
+
+            angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+
+            distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
+
         }
 
 
 
+
+        org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(turretPower);
+
+        org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
 
         double y = -gamepad1.left_stick_y;
 
@@ -109,6 +166,13 @@ public class Scrim_TeleOp extends OpMode {
         telemetry.addData("Front Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontRight.getVelocity());
         telemetry.addData("Front Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontLeft.getVelocity());
         telemetry.addData("FlyWheel Target", "%.4f", Target);
+        if (result != null && result.isValid()) {
+            telemetry.addData("Target Valid", true);
+            telemetry.addData("ty (deg)", "%.2f", targetOffsetAngle_Vertical);
+            telemetry.addData("Distance (in)", "%.2f", distanceFromLimelightToGoalInches);
+        } else {
+            telemetry.addData("Target Valid", false);
+        }
 
 
     }
