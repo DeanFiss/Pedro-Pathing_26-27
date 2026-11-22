@@ -13,19 +13,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Shooter;
 
 @TeleOp
 public class LookupTableTuner extends OpMode {
 
     double TargetTPS = 1900;
     double HoodAngle = 0;
-    Hardware Hardware;
+    private Hardware Hardware;
 
     boolean prevDpadUp = false;
     boolean prevDpadDown = false;
     boolean prevDpadLeft = false;
     boolean prevDpadRight = false;
     double distanceFromLimelightToGoalInches;
+    private Shooter Shooter;
 
     @Override
     public void init() {
@@ -68,18 +70,7 @@ public class LookupTableTuner extends OpMode {
         }
         org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(HoodAngle);
 
-        LLResult result = limelight.getLatestResult();
 
-        if (result != null && result.isValid()) {
-            double targetOffsetAngle_Vertical = result.getTy();
-
-            double angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
-
-            double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
-
-            distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
-
-        }
 
         telemetry.addLine("Hold RIGHT BUMPER to drive forward at test velocity");
         telemetry.addLine("DPAD UP/DOWN to increase/decrease velocity");

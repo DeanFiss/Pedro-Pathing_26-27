@@ -1,15 +1,141 @@
 package org.firstinspires.ftc.teamcode.SubAssemblies;
 
-import androidx.core.math.MathUtils;
-import com.pedropathing.math.Vector;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.poseTracker;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.GOAL_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_LENS_HEIGHT_INCHES;
+import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_MOUNT_ANGLE_DEGREES;
+import static org.firstinspires.ftc.teamcode.Hardware.limelight;
+
+import com.qualcomm.hardware.limelightvision.LLResult;
 
 public class Shooter {
 
-    private final Vector robotToGoalVector = new Vector();
+    public static double targetOffsetAngle_Vertical;
+    public static double angleToGoalDegrees;
+    public static double angleToGoalRadians;
+    public static double distanceFromLimelightToGoalInches;
+    public static boolean CanSee;
+    public void GetDistance(){
+        LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+            CanSee = true;
+
+            targetOffsetAngle_Vertical = result.getTy();
+
+            angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
+
+            angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+
+            distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
+
+        } else {
+            CanSee = false;
+        }
+    }
+
+    /*if (gamepad1.a) {
+        LLResult result = limelight.getLatestResult();
+        if (result != null && result.isValid()) {
+            double tx = result.getTx();
+            double headingError = -tx;
+
+            if (Math.abs(headingError) > TurretConstants.DEADBAND) {
+                if (headingError < 0) {
+                    turretPower = (TurretConstants.Kp * headingError) + TurretConstants.MIN_COMMAND;
+                } else {
+                    turretPower = (TurretConstants.Kp * headingError) - TurretConstants.MIN_COMMAND;
+                }
+            }
+        }
+    } else {
+        turretPower = gamepad1.right_stick_x * 0.5;
+    }
+
+    LLResult result = limelight.getLatestResult();
+
+        if (result != null && result.isValid()) {
+        targetOffsetAngle_Vertical = result.getTy();
+
+        angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
+
+        angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
+
+        distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*private final Vector robotToGoalVector = new Vector();
     private Vector calculateShotVectorAndUpdateTurret(double robotHeading) {
         //constants
         double g = 32.174 * 12;
@@ -63,6 +189,6 @@ public class Shooter {
 
 
 
-        return new Vector(flywheelSpeed, hoodAngle);
-    }
+        return new Vector(flywheelSpeed, hoodAngle);*/
+
 }

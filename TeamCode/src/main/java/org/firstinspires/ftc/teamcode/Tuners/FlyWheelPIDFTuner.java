@@ -9,11 +9,12 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.Hardware;
 
+
 @TeleOp
 public class FlyWheelPIDFTuner extends OpMode{
     Hardware Hardware;
-    public double  highVelocity = 1500;
-    public double lowVelocity = 0;
+    public double  highVelocity = 1400;
+    public double lowVelocity = 700;
     double curTargetVelocity = highVelocity;
     double F = 0;
     double P = 0;

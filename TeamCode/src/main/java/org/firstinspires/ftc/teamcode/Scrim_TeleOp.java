@@ -1,38 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.Constants.DriveConstants.MAX_VELOCITY;
-import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.GOAL_HEIGHT_INCHES;
-import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_LENS_HEIGHT_INCHES;
-import static org.firstinspires.ftc.teamcode.Constants.TurretConstants.LIMELIGHT_MOUNT_ANGLE_DEGREES;
 import static org.firstinspires.ftc.teamcode.Hardware.limelight;
 import static org.firstinspires.ftc.teamcode.Hardware.pinpoint;
+import static org.firstinspires.ftc.teamcode.SubAssemblies.Turret.turretPower;
 
-import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
-import org.firstinspires.ftc.teamcode.Constants.TurretConstants;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Shooter;
 
 @TeleOp
 public class Scrim_TeleOp extends OpMode {
-
-
-
     private boolean lastOptionsState = false;
     private int Inatkeon = 0;
-    Hardware Hardware;
+    private Shooter Shooter;
     private double Target = 1700;
-    private double targetOffsetAngle_Vertical;
-    private double angleToGoalDegrees;
-    private double angleToGoalRadians;
-    private double distanceFromLimelightToGoalInches;
+
 
     @Override
     public void init() {
-        Hardware = new Hardware(hardwareMap);
+        Hardware hardware = new Hardware(hardwareMap);
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
 
@@ -85,47 +76,16 @@ public class Scrim_TeleOp extends OpMode {
         if (gamepad2.dpad_right) {
             Target -= 5;
         }
+        /*if (Shooter.CanSee) {
+            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Shooter.GetDistance());
+            org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(turretPower);
+        }*/
 
-
-        double turretPower = 0.0;
-
-        if (gamepad1.a) {
-            LLResult result = limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                double tx = result.getTx();
-                double headingError = -tx;
-
-                if (Math.abs(headingError) > TurretConstants.DEADBAND) {
-                    if (headingError < 0) {
-                        turretPower = (TurretConstants.Kp * headingError) + TurretConstants.MIN_COMMAND;
-                    } else {
-                        turretPower = (TurretConstants.Kp * headingError) - TurretConstants.MIN_COMMAND;
-                    }
-                }
-            }
-        } else {
-            turretPower = gamepad1.right_stick_x * 0.5;
-        }
-
-        LLResult result = limelight.getLatestResult();
-
-        if (result != null && result.isValid()) {
-            targetOffsetAngle_Vertical = result.getTy();
-
-            angleToGoalDegrees = LIMELIGHT_MOUNT_ANGLE_DEGREES + targetOffsetAngle_Vertical;
-
-            angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
-
-            distanceFromLimelightToGoalInches = (GOAL_HEIGHT_INCHES - LIMELIGHT_LENS_HEIGHT_INCHES) / Math.tan(angleToGoalRadians);
-
-        }
+        Hardware.FlyWheel.setVelocity(Target);
 
 
 
 
-        org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(turretPower);
-
-        org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Target);
 
         double y = -gamepad1.left_stick_y;
 
@@ -166,10 +126,10 @@ public class Scrim_TeleOp extends OpMode {
         telemetry.addData("Front Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontRight.getVelocity());
         telemetry.addData("Front Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontLeft.getVelocity());
         telemetry.addData("FlyWheel Target", "%.4f", Target);
-        if (result != null && result.isValid()) {
+        if (org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
             telemetry.addData("Target Valid", true);
-            telemetry.addData("ty (deg)", "%.2f", targetOffsetAngle_Vertical);
-            telemetry.addData("Distance (in)", "%.2f", distanceFromLimelightToGoalInches);
+            telemetry.addData("ty (deg)", "%.2f", org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.targetOffsetAngle_Vertical);
+            telemetry.addData("Distance (in)", "%.2f", org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches);
         } else {
             telemetry.addData("Target Valid", false);
         }
