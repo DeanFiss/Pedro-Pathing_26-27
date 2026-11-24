@@ -11,10 +11,12 @@ public class HoodServoMinMaxPosTuner extends OpMode {
     private double servoPositionOpen = 0;
     private double servoPositionClosed = 0;
 
+    Hardware Hardware;
+
 
     @Override
     public void init() {
-
+        Hardware = new Hardware(hardwareMap);
     }
 
     @Override
@@ -32,7 +34,7 @@ public class HoodServoMinMaxPosTuner extends OpMode {
         }
         servoPosition = Math.max(0.0, Math.min(1.0, servoPosition));
 
-        Hardware.Gate.setPosition(servoPosition);
+        org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(servoPosition);
 
         telemetry.addLine("Use DPAD UP and DPAD DOWN to move the gate");
         telemetry.addLine("Move gate to fully OPEN position");

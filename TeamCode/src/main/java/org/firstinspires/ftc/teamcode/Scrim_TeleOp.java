@@ -118,6 +118,7 @@ public class Scrim_TeleOp extends OpMode {
         org.firstinspires.ftc.teamcode.Hardware.BackRight.setVelocity(br * MAX_VELOCITY);
 
 
+
         telemetry.addData("Flywheel's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FlyWheel.getVelocity());
         telemetry.addData("Left Intake's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.getVelocity());
         telemetry.addData("Right Intake's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.IntakeRight.getVelocity());

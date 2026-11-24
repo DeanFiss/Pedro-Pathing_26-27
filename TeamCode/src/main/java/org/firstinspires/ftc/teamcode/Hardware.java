@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 
@@ -30,6 +31,7 @@ public class Hardware {
     public static Servo Gate;
     public static Servo Hood;
     public static Limelight3A limelight;
+    public static TouchSensor limitSwitch;
 
     public static GoBildaPinpointDriver pinpoint;
     public Hardware (HardwareMap hardwareMap) {
@@ -83,7 +85,7 @@ public class Hardware {
         Gate = hardwareMap.get(Servo.class, "Gate");
 
         //Gate.scaleRange(ShooterConstants.GATE_SERVO_CLOSED, ShooterConstants.GATE_SERVO_OPEN);
-        // Hood.scaleRange(ShooterConstants.HOOD_SERVO_MIN_POS, ShooterConstants.HOOD_SERVO_MAX_POS);
+        // Hood.scaleRange(ShooterConstants.HOOD_SERVO_DOWN_POS, ShooterConstants.HOOD_SERVO_UP_POS);
 
         //Pinpont
         pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");//tune mm
@@ -93,10 +95,13 @@ public class Hardware {
                 GoBildaPinpointDriver.EncoderDirection.FORWARD                           //tune
         );
         pinpoint.resetPosAndIMU();
+        //Sensors
+        //limitSwitch = hardwareMap.get(TouchSensor.class, "Limitswitch");
 
         //LimeLight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
+
 
 
 

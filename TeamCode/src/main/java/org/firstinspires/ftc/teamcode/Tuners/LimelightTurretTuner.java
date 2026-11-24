@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Constants.TurretConstants;
 import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Shooter;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Turret;
 
 @TeleOp
 public class LimelightTurretTuner extends OpMode {
@@ -18,11 +20,17 @@ public class LimelightTurretTuner extends OpMode {
     private boolean dpadRightPrev = false;
     private boolean leftBumperPrev = false;
     private boolean rightBumperPrev = false;
-    Hardware Hardware;
+    private Hardware Hardware;
+    private Turret Turret;
+    private Shooter Shooter;
+    private double turretPower;
+    private double tx;
 
     @Override
     public void init() {
         Hardware = new Hardware(hardwareMap);
+        Turret = new Turret();
+        Shooter = new Shooter();
     }
 
     @Override
@@ -50,6 +58,7 @@ public class LimelightTurretTuner extends OpMode {
         if (gamepad1.left_bumper && !leftBumperPrev) {
             TurretConstants.DEADBAND = Math.max(0.0, TurretConstants.DEADBAND - 0.25);
         }
+        Turret.GetTurretAngle();
 
         dpadUpPrev = gamepad1.dpad_up;
         dpadDownPrev = gamepad1.dpad_down;
@@ -57,44 +66,30 @@ public class LimelightTurretTuner extends OpMode {
         dpadRightPrev = gamepad1.dpad_right;
         leftBumperPrev = gamepad1.left_bumper;
         rightBumperPrev = gamepad1.right_bumper;
-
-        double turretPower = 0.0;
-        double tx = 0.0;
-        boolean hasTarget = false;
-
-        if (gamepad1.a) {
-            LLResult result = org.firstinspires.ftc.teamcode.Hardware.limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                hasTarget = true;
-                tx = result.getTx();
-                double headingError = -tx;
-
-                if (Math.abs(headingError) > TurretConstants.DEADBAND) {
-                    if (headingError < 0) {
-                        turretPower = (TurretConstants.Kp * headingError) + TurretConstants.MIN_COMMAND;
-                    } else {
-                        turretPower = (TurretConstants.Kp * headingError) - TurretConstants.MIN_COMMAND;
-                    }
-                }
-            }
+        if(org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
+            turretPower = org.firstinspires.ftc.teamcode.SubAssemblies.Turret.turretPower;
+            tx = org.firstinspires.ftc.teamcode.SubAssemblies.Turret.tx;
         } else {
-            turretPower = gamepad1.right_stick_x * 0.5;
+            turretPower = 0.0;
+            tx = 0.0;
         }
+        Shooter.GetDistance();
+        Turret.GetTurretAngle();
 
         Hardware.Turret.setPower(turretPower);
 
-        telemetry.addData("Target Valid", hasTarget);
+        if (org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
+            telemetry.addData("Target Valid", true);
+            telemetry.addData("ty (deg)", "%.2f", org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.targetOffsetAngle_Vertical);
+            telemetry.addData("Distance (in)", "%.2f", org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches);
+        } else {
+            telemetry.addData("Target Valid", false);
+        }
         telemetry.addData("tx", "%.2f", tx);
         telemetry.addData("Turret Power", "%.3f", turretPower);
         telemetry.addData("Kp (D-Pad Up/Down)", "%.4f", TurretConstants.Kp);
         telemetry.addData("MIN_COMMAND (D-Pad Left/Right)", "%.3f", TurretConstants.MIN_COMMAND);
         telemetry.addData("DEADBAND (Bumpers)", "%.2f", TurretConstants.DEADBAND);
         telemetry.update();
-    }
-
-    @Override
-    public void stop() {
-        org.firstinspires.ftc.teamcode.Hardware.limelight.stop();
-        Hardware.Turret.setPower(0);
     }
 }
