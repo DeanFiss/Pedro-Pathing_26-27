@@ -34,6 +34,7 @@ public class Hardware {
     public static TouchSensor limitSwitch;
 
     public static GoBildaPinpointDriver pinpoint;
+
     public Hardware (HardwareMap hardwareMap) {
 
         //Motors
@@ -101,12 +102,6 @@ public class Hardware {
         //LimeLight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
-
-
-
-
-
-
 
 
     }

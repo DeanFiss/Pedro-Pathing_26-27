@@ -21,18 +21,18 @@ public class Scrim_TeleOp extends OpMode {
     private double Target = 1700;
 
 
+
+
     @Override
     public void init() {
         Hardware hardware = new Hardware(hardwareMap);
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
-
     }
 
     @Override
     public void start() {
-        limelight.start();
-    }
+        limelight.start();}
 
     @Override
     public void loop() {
@@ -76,10 +76,14 @@ public class Scrim_TeleOp extends OpMode {
         if (gamepad2.dpad_right) {
             Target -= 5;
         }
-        /*if (Shooter.CanSee) {
-            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(Shooter.GetDistance());
-            org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(turretPower);
-        }*/
+        if (Shooter.CanSee) {
+            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(
+                    -0.133333 * Math.pow(org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches, 2)
+                    + 17.2381 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches
+                    + 1254.28571);
+            org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(
+                    0.008 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches -0.2);
+        }
 
         Hardware.FlyWheel.setVelocity(Target);
 

@@ -58,7 +58,6 @@ public class LimelightTurretTuner extends OpMode {
         if (gamepad1.left_bumper && !leftBumperPrev) {
             TurretConstants.DEADBAND = Math.max(0.0, TurretConstants.DEADBAND - 0.25);
         }
-        Turret.GetTurretAngle();
 
         dpadUpPrev = gamepad1.dpad_up;
         dpadDownPrev = gamepad1.dpad_down;
@@ -66,6 +65,9 @@ public class LimelightTurretTuner extends OpMode {
         dpadRightPrev = gamepad1.dpad_right;
         leftBumperPrev = gamepad1.left_bumper;
         rightBumperPrev = gamepad1.right_bumper;
+
+        Turret.GetTurretAngle(gamepad2);
+
         if(org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
             turretPower = org.firstinspires.ftc.teamcode.SubAssemblies.Turret.turretPower;
             tx = org.firstinspires.ftc.teamcode.SubAssemblies.Turret.tx;
@@ -74,7 +76,6 @@ public class LimelightTurretTuner extends OpMode {
             tx = 0.0;
         }
         Shooter.GetDistance();
-        Turret.GetTurretAngle();
 
         Hardware.Turret.setPower(turretPower);
 

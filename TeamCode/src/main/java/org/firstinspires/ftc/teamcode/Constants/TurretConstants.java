@@ -7,4 +7,5 @@ public class TurretConstants {
     public static double LIMELIGHT_MOUNT_ANGLE_DEGREES = 55;
     public static double GOAL_HEIGHT_INCHES = 50;
     public static double LIMELIGHT_LENS_HEIGHT_INCHES = 9.64567;
+    public static double MAX_TICKS = 2.56 * 45;
 }
