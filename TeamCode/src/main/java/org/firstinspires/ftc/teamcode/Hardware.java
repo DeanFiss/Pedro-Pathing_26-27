@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -32,6 +34,7 @@ public class Hardware {
     public static Servo Hood;
     public static Limelight3A limelight;
     public static TouchSensor limitSwitch;
+    public static NormalizedColorSensor coloursensor;
 
     public static GoBildaPinpointDriver pinpoint;
 
@@ -97,7 +100,11 @@ public class Hardware {
         );
         pinpoint.resetPosAndIMU();
         //Sensors
-        //limitSwitch = hardwareMap.get(TouchSensor.class, "Limitswitch");
+        limitSwitch = hardwareMap.get(TouchSensor.class, "Limitswitch");
+        coloursensor = hardwareMap.get(NormalizedColorSensor.class, "Coloursensor" );
+
+
+
 
         //LimeLight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");

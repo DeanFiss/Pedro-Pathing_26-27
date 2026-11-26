@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
 import org.firstinspires.ftc.teamcode.Hardware;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Intake;
 
 public class AutoCommands {
 
@@ -17,31 +18,34 @@ public class AutoCommands {
     public static int currentPresetIndex = 0;
     public static double TargetVelocity;
     public static double TargetHoodAngle;
+    private Hardware Hardware;
     public static ElapsedTime timer = new ElapsedTime();
+
+
 
     public static Command Idle = Command.build()
             .setExecute(() -> {
-                Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
-                Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
-                Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
-                Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
                 TargetVelocity = velocity;
-                Hardware.FlyWheel.setVelocity(TargetVelocity);
-                Hardware.Hood.setPosition(TargetHoodAngle);
-                Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
-                Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(TargetVelocity);
+                org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(TargetHoodAngle);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
             })
             .setPriority(-1)
             .setInterruptedBehavior(InterruptedBehavior.SUSPEND)
             .requiring(
-                    Hardware.FlyWheel,
-                    Hardware.FlowerRampLeft,
-                    Hardware.FlowerRampRight,
-                    Hardware.IntakeBarLeft,
-                    Hardware.IntakeBarRight,
-                    Hardware.IntakeLeft,
-                    Hardware.IntakeRight,
-                    Hardware.Hood);
+                    org.firstinspires.ftc.teamcode.Hardware.FlyWheel,
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeRight,
+                    org.firstinspires.ftc.teamcode.Hardware.Hood);
 
 
     
@@ -50,17 +54,17 @@ public class AutoCommands {
                 timer.reset();
             })
             .setExecute(() -> {
-                Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
-                Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
-                Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
-                Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
             })
-            .setDone(()-> timer.seconds() >= IntakeConstants.AUTO_INTAKE_TIME)
+            .setDone(()-> timer.seconds() >= IntakeConstants.AUTO_INTAKE_TIME || org.firstinspires.ftc.teamcode.SubAssemblies.Intake.isGamePieceDetected())
             .requiring(
-                    Hardware.IntakeLeft,
-                    Hardware.IntakeRight,
-                    Hardware.IntakeBarLeft,
-                    Hardware.IntakeBarRight);
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight);
 
 
     public static Command FlowerIntake = Command.build()
@@ -68,21 +72,21 @@ public class AutoCommands {
                 timer.reset();
             })
             .setExecute(() -> {
-                Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_DOWN_POS);
-                Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_DOWN_POS);
-                Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
-                Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
-                Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
-                Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
             })
             .setDone(()-> timer.seconds() >= IntakeConstants.AUTO_FLOWER_INTAKE_TIME)
             .requiring(
-                    Hardware.FlowerRampLeft,
-                    Hardware.FlowerRampRight,
-                    Hardware.IntakeBarLeft,
-                    Hardware.IntakeBarRight,
-                    Hardware.IntakeLeft,
-                    Hardware.IntakeRight
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeRight
             );
 
 
@@ -91,42 +95,42 @@ public class AutoCommands {
                 timer.reset();
             })
             .setExecute(() -> {
-                Hardware.FlyWheel.setVelocity(TargetVelocity);
-                Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
-                Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
-                Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
+                org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(TargetVelocity);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
+                org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_OPEN);
             })
-            .setDone(() -> Hardware.FlyWheel.getVelocity() <= 1400 || timer.seconds() >= ShooterConstants.AUTO_SHOOTER_TIME)
+            .setDone(() -> org.firstinspires.ftc.teamcode.Hardware.FlyWheel.getVelocity() <= 1400 || timer.seconds() >= ShooterConstants.AUTO_SHOOTER_TIME)
             .setEnd(endCondition -> {
                 currentPresetIndex += 1;
-                Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
+                org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
             })
             .requiring(
-                    Hardware.IntakeRight,
-                    Hardware.IntakeLeft,
-                    Hardware.Gate,
-                    Hardware.FlyWheel
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.Gate,
+                    org.firstinspires.ftc.teamcode.Hardware.FlyWheel
                     );
     public static Command Off = Command.build()
             .setExecute(() -> {
-                Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
-                Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
-                Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
-                Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
-                Hardware.FlyWheel.setVelocity(0);
-                Hardware.IntakeLeft.setVelocity(0);
-                Hardware.IntakeRight.setVelocity(0);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
+                org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(0);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(0);
+                org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(0);
             })
             .setEnd(endCondition -> {
                 // executed on end
             })
             .requiring(
-                    Hardware.FlyWheel,
-                    Hardware.FlowerRampLeft,
-                    Hardware.FlowerRampRight,
-                    Hardware.IntakeBarLeft,
-                    Hardware.IntakeBarRight,
-                    Hardware.IntakeLeft,
-                    Hardware.IntakeRight
+                    org.firstinspires.ftc.teamcode.Hardware.FlyWheel,
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeLeft,
+                    org.firstinspires.ftc.teamcode.Hardware.IntakeRight
             );
 }

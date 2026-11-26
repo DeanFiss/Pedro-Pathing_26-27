@@ -62,6 +62,7 @@ public class Shoot_and_Park extends LinearOpMode {
         follower.update();
 
         waitForStart();
+        schedule(AutoCommands.Idle);
         schedule(autoRoutine());
 
         while (opModeIsActive()) {
