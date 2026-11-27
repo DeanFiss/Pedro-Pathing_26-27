@@ -72,7 +72,7 @@ public class Hardware {
         IntakeLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         IntakeRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(18, 0, 0, 17.725);
+        PIDFCoefficients pidfCoefficients = new PIDFCoefficients(45, 0, 0, 20);
         FlyWheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
 
         Turret.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

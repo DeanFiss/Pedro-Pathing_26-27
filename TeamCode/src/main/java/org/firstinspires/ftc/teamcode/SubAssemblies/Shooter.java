@@ -14,7 +14,7 @@ public class Shooter {
     public static double angleToGoalRadians;
     public static double distanceFromLimelightToGoalInches;
     public static boolean CanSee;
-    public void GetDistance(){
+    public static void GetDistance(){
         LLResult result = limelight.getLatestResult();
 
         if (result != null && result.isValid()) {

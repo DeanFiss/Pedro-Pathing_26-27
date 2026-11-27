@@ -31,7 +31,7 @@ public class AutoCommands {
                 org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
                 TargetVelocity = velocity;
                 org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(TargetVelocity);
-                org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(TargetHoodAngle);
+                //org.firstinspires.ftc.teamcode.Hardware.Hood.setPosition(TargetHoodAngle);
                 org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
                 org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_IDLE_VELOCITY);
             })

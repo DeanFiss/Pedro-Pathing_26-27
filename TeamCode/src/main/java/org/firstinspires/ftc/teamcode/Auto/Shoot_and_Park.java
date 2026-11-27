@@ -38,6 +38,7 @@ public class Shoot_and_Park extends LinearOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
+                AutoCommands.Idle,
                 waitUntil(() -> Hardware.FlyWheel.getVelocity() >= 1500),
                 follow(follower, path1()),
                 AutoCommands.Shoot,

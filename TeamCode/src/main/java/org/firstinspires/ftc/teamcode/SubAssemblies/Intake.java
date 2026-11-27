@@ -8,10 +8,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Intake {
     private static Hardware hardware;
-    private static final double DETECTION_THRESHOLD_CM = 5.0;
+    private static final double DETECTION_THRESHOLD_CM = 3.0;
+    private static final ElapsedTime timer = new ElapsedTime();
+
+    private static boolean ISTIMER;
+    public static boolean hasfour;
 
     public void Init(HardwareMap ahwMap) {
         hardware = new Hardware(ahwMap);
@@ -39,6 +44,21 @@ public class Intake {
         }
         double distanceCm = ((DistanceSensor) coloursensor).getDistance(DistanceUnit.CM);
         return !Double.isNaN(distanceCm) && distanceCm < DETECTION_THRESHOLD_CM;
+    }
+
+    public static void ishasFour() {
+        if (isGamePieceDetected()) {
+            if (ISTIMER) {
+                ISTIMER = true;
+            }
+        } else if (!isGamePieceDetected()) {
+            timer.reset();
+            ISTIMER = false;
+        } if (timer.milliseconds() > 500) {
+             hasfour = true;
+        } if (hasfour && !isGamePieceDetected()){
+            hasfour = false;
+        }
     }
 
 

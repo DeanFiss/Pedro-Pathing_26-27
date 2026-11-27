@@ -11,38 +11,49 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Constants.ShooterConstants;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Intake;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Intake;
 import org.firstinspires.ftc.teamcode.SubAssemblies.Shooter;
+import org.firstinspires.ftc.teamcode.SubAssemblies.Turret;
 
 @TeleOp
 public class Scrim_TeleOp extends OpMode {
     private boolean lastOptionsState = false;
     private int Inatkeon = 0;
-    private Shooter Shooter;
     private double Target = 1700;
-
+    private double HoodPos = 0.0;
+    private boolean isRumbleActive = false;
+    private boolean shouldRumble = false;
+    private Intake intake;
 
 
 
     @Override
     public void init() {
         Hardware hardware = new Hardware(hardwareMap);
+        Shooter shooter = new Shooter();
+        intake = new Intake();
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampLeft.setPosition(IntakeConstants.LEFT_FLOWER_RAMP_SERVO_UP_POS);
         org.firstinspires.ftc.teamcode.Hardware.FlowerRampRight.setPosition(IntakeConstants.RIGHT_FLOWER_RAMP_SERVO_UP_POS);
     }
 
     @Override
     public void start() {
-        limelight.start();}
+        limelight.start();
+        intake.Init(hardwareMap);
+    }
 
     @Override
     public void loop() {
+
+
 
         if (Inatkeon == 1) {
             org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(IntakeConstants.INTAKE_VELOCITY);
             org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(IntakeConstants.INTAKE_VELOCITY);
         } else if (Inatkeon == 2) {
             org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setVelocity(-IntakeConstants.INTAKE_VELOCITY);
-            org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(-  IntakeConstants.INTAKE_VELOCITY);
+            org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setVelocity(-IntakeConstants.INTAKE_VELOCITY);
         } else if (Inatkeon == 0) {
             org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.setPower(0);
             org.firstinspires.ftc.teamcode.Hardware.IntakeRight.setPower(0);
@@ -62,31 +73,32 @@ public class Scrim_TeleOp extends OpMode {
         } else {
             org.firstinspires.ftc.teamcode.Hardware.Gate.setPosition(ShooterConstants.GATE_SERVO_CLOSED);
 
-        } if (gamepad2.dpad_up) {
+        } if (Intake.hasfour) {
+            shouldRumble = true;
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
-
-        } if (gamepad2.dpad_down) {
+            if (shouldRumble && !isRumbleActive) {
+                gamepad1.rumble(1.0, 1.0, gamepad1.RUMBLE_DURATION_CONTINUOUS);
+                isRumbleActive = true;
+            }
+        } else {
+            shouldRumble = false;
+            gamepad1.stopRumble();
+            isRumbleActive = false;
+            Inatkeon = 0;
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
         }
-        if (gamepad2.dpad_left) {
-            Target += 5;
-        }
-        if (gamepad2.dpad_right) {
-            Target -= 5;
-        }
-        if (Shooter.CanSee) {
-            org.firstinspires.ftc.teamcode.Hardware.FlyWheel.setVelocity(
-                    -0.133333 * Math.pow(org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches, 2)
-                    + 17.2381 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches
-                    + 1254.28571);
-            org.firstinspires.ftc.teamcode.Hardware.Turret.setPower(
-                    0.008 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches -0.2);
-        }
 
-        Hardware.FlyWheel.setVelocity(Target);
-
+        Intake.isGamePieceDetected();
+        Intake.ishasFour();
+        Shooter.GetDistance();
+        if (org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
+            Hardware.FlyWheel.setVelocity(Target);
+            Hardware.Hood.setPosition(HoodPos);
+        }
+        Target = 8 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches + 1160;
+        HoodPos = 0.012 * org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.distanceFromLimelightToGoalInches -0.3;
 
 
 
@@ -126,11 +138,15 @@ public class Scrim_TeleOp extends OpMode {
         telemetry.addData("Flywheel's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FlyWheel.getVelocity());
         telemetry.addData("Left Intake's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.IntakeLeft.getVelocity());
         telemetry.addData("Right Intake's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.IntakeRight.getVelocity());
-        telemetry.addData("Back Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.BackRight.getVelocity());
+        /*telemetry.addData("Back Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.BackRight.getVelocity());
         telemetry.addData("Back Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.BackLeft.getVelocity());
         telemetry.addData("Front Right Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontRight.getVelocity());
-        telemetry.addData("Front Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontLeft.getVelocity());
+        telemetry.addData("Front Left Motor's current Velocity", "%.4f", org.firstinspires.ftc.teamcode.Hardware.FrontLeft.getVelocity());*/
         telemetry.addData("FlyWheel Target", "%.4f", Target);
+        telemetry.addData("Hood Target", "%.4f", HoodPos);
+        telemetry.addData("Has Four?", Intake.hasfour);
+
+
         if (org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.CanSee) {
             telemetry.addData("Target Valid", true);
             telemetry.addData("ty (deg)", "%.2f", org.firstinspires.ftc.teamcode.SubAssemblies.Shooter.targetOffsetAngle_Vertical);
@@ -138,10 +154,5 @@ public class Scrim_TeleOp extends OpMode {
         } else {
             telemetry.addData("Target Valid", false);
         }
-
-
     }
-
-
-
 }
