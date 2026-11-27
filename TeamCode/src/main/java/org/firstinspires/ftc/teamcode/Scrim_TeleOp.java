@@ -7,6 +7,7 @@ import static org.firstinspires.ftc.teamcode.SubAssemblies.Turret.turretPower;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Constants.IntakeConstants;
@@ -78,14 +79,15 @@ public class Scrim_TeleOp extends OpMode {
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_UP_POS);
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_UP_POS);
             if (shouldRumble && !isRumbleActive) {
-                gamepad1.rumble(1.0, 1.0, gamepad1.RUMBLE_DURATION_CONTINUOUS);
+                gamepad1.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
+                gamepad2.rumble(1.0, 1.0, Gamepad.RUMBLE_DURATION_CONTINUOUS);
                 isRumbleActive = true;
             }
         } else {
             shouldRumble = false;
             gamepad1.stopRumble();
+            gamepad2.stopRumble();
             isRumbleActive = false;
-            Inatkeon = 0;
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarLeft.setPosition(IntakeConstants.LEFT_INTAKE_SERVO_DOWN_POS);
             org.firstinspires.ftc.teamcode.Hardware.IntakeBarRight.setPosition(IntakeConstants.RIGHT_INTAKE_SERVO_DOWN_POS);
         }
